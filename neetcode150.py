@@ -3,6 +3,58 @@ class listnode:
         self.value=value
         self.next=next
 
+
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
+
+class linklist:
+    def __init__(self,head):
+        self.head=head
+
+    def display(self):
+        current=self.head
+        while current.next!=None:
+            print(current.value,end=",")
+            current=current.next
+        print(current.value)
+
+    def add(self,value):
+        current=self.head
+        while current.next!=None:
+            current=current.next
+        current.next=listnode(value)
+    
+
+
+class KthLargest:
+    def __init__(self,k,nums):
+        self.k=k
+        self.nums=nums
+        
+    def add(self,val):
+        self.nums.append(val)
+        self.nums.sort()
+        return self.nums[-self.k]
+
+
+def invertTree(root):
+    if root==None:
+        return
+    temproot=root.left
+    root.left=root.right
+    root.right=temproot
+    invertTree(root.left)
+    invertTree(root.right)
+    return root
+
+
+
 def binarysearch(array,l,r,target):
     if r<l:
         return -1
@@ -97,22 +149,65 @@ def reverselist(head):
         curr=temp
     return prev
             
-
             
+def mergeTwoLists(head1,head2):
+    current1=head1
+    current2=head2
+    if head1.value<=head2.value:
+        current3=linklist(head1.value)
+        head3=listnode(current1.value)
+        current1=current1.next
+    else:
+        current3=linklist(head2.value)
+        head3=listnode(current2.value)
+        current2=current2.next
+    current3=head3
+    while current1!=None and current2!=None:
+        if current1.value<=current2.value:
+            current3.next=listnode(current1.value)
+            current1=current1.next
+        else:
+            current3.next=listnode(current2.value)
+            current2=current2.next
+        current3=current3.next
+    if current1==None:
+        current3.next=current2
+    else:
+        current3.next=current1
+    return head3
+            
+
+def climbStairs(n):
+    # def dfs(i): recursive way O(2^n)
+    #     if i>=n:
+    #         return i==n
+    #     return dfs(i+1)+dfs(i+2)
+    if n<=2:#bottom up dynamic O(n)
+        return n
+    ways=[0]*(n+1)
+    ways[1],ways[2]=1,2
+    for i in range(3,n+1):
+        ways[i]=ways[i-1]+ways[i-2]
+    return ways[i]
+    #return dfs(0)
 
 
 def main():
     #print(binarysearch([1,2,3,4,5,6],0,5,4))
     #print(maxProfit([10,8,7,5,2]))
     #print(isAnagram("racecar","carrace"))
-    head=listnode(0)
-    current=head
-    for i in range(3):
-        ln=listnode(i+1)
-        current.next=ln
-        current=current.next
-
-       
-
-
+    # list1=linklist(listnode(1))
+    # list1.add(2)
+    # list1.add(4)
+    # list2=linklist(listnode(1))
+    # list2.add(3)
+    # list2.add(5)
+    # list3=linklist(mergeTwoLists(list1.head,list2.head))
+    # list3.display()
+    k=KthLargest(3, [1, 2, 3, 3])
+    print(k.add(3))
+    print(k.add(5))
+    print(k.add(6))
+    print(k.add(7))
+    print(k.add(8))
 main()
