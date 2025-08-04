@@ -13,6 +13,13 @@ class TreeNode:
 
 
 
+class Interval:
+    def __init__(self,start,end):
+        self.start=start
+        self.end=end
+
+
+
 class linklist:
     def __init__(self,head):
         self.head=head
@@ -192,6 +199,34 @@ def climbStairs(n):
     #return dfs(0)
 
 
+def canAttendMeeting(intervals):
+    sortedintervals=intervals.sort(key=lambda x:x.start)
+    for i in range(1,len(intervals)):
+        if intervals[i-1].end>intervals[i].start:
+            return False
+    return True
+
+
+def groupAnagrams(strs):
+    counts=[]
+    for i in range(len(strs)):
+        count={}
+        for j in range(len(strs[i])):
+            count[strs[i][j]]=1+count.get(strs[i][j],0)
+        counts.append(count)
+    categorized=[]
+    for i in range(0,len(counts)-1):
+        if counts[i]!=-1:
+            categorized.append([strs[i]])
+            for j in range(i+1,len(counts)):
+                if counts[i]==counts[j]:
+                    categorized[-1].append(strs[j])
+                    counts[j]=-1
+    if counts[-1]!=-1:
+        categorized.append([strs[-1]])
+    return categorized
+
+
 def main():
     #print(binarysearch([1,2,3,4,5,6],0,5,4))
     #print(maxProfit([10,8,7,5,2]))
@@ -204,10 +239,12 @@ def main():
     # list2.add(5)
     # list3=linklist(mergeTwoLists(list1.head,list2.head))
     # list3.display()
-    k=KthLargest(3, [1, 2, 3, 3])
-    print(k.add(3))
-    print(k.add(5))
-    print(k.add(6))
-    print(k.add(7))
-    print(k.add(8))
+    # k=KthLargest(3, [1, 2, 3, 3])
+    # print(k.add(3))
+    # print(k.add(5))
+    # print(k.add(6))
+    # print(k.add(7))
+    # print(k.add(8))
+    print(groupAnagrams(["act","pots","tops","cat","stop","hat"]))
+
 main()
