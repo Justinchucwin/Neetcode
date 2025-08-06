@@ -227,6 +227,33 @@ def groupAnagrams(strs):
     return categorized
 
 
+def hasDuplicate(nums):
+    nums.sort()
+    for i in range(1,len(nums)):
+        if nums[i-1]==nums[i]:
+            return True
+    return False
+
+
+def twoSum(nums,target):
+    indices={}
+    for i,n in enumerate(nums):
+        indices[n]=i
+    for i,n in enumerate(nums):
+        diff=target-n
+        if diff in indices and i!=indices[diff]:
+            return [i,indices[diff]]
+
+
+
+def topKFrequent(nums,k):
+    counts={}
+    for i in nums:
+        counts[i]=1+counts.get(i,0)
+    keysorted=list(dict(sorted(counts.items(),key=lambda x:x[1])).keys())
+    return keysorted[-k:]
+
+
 def main():
     #print(binarysearch([1,2,3,4,5,6],0,5,4))
     #print(maxProfit([10,8,7,5,2]))
