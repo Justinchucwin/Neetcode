@@ -129,6 +129,9 @@ def validpalindrome(s):
     return True
 
 
+
+
+
 def isValid(s):#gets a string as an arguement and see's if it follows rule of closed parentheses
     stack=[]
     closetoopen={")":"(","}":"{","[":"]"}
@@ -156,7 +159,16 @@ def reverselist(head):
         curr=temp
     return prev
             
-            
+def hasCycle(head):
+    curr=head
+    count={}
+    while curr!=None:
+        count[curr]=1+count.get(curr,0)
+        if count[curr]>1:
+            return True
+        curr=curr.next
+    return False
+
 def mergeTwoLists(head1,head2):
     current1=head1
     current2=head2
@@ -235,23 +247,49 @@ def hasDuplicate(nums):
     return False
 
 
-def twoSum(nums,target):
-    indices={}
-    for i,n in enumerate(nums):
-        indices[n]=i
-    for i,n in enumerate(nums):
-        diff=target-n
-        if diff in indices and i!=indices[diff]:
-            return [i,indices[diff]]
-
+def twoSum(nums,target):#both have O(n) time complexity
+    l,r=0,len(nums)-1#two pointers, space complexity O(1)
+    while l<r:
+        cursum=nums[l]+nums[r]
+        if  cursum<target:
+            l+=1
+        elif cursum>target:
+            r-=1
+        else:
+            return [l+1,r+1]
+    return []
+    # indices={}#hash map, space complexity O(n)
+    # for i,n in enumerate(nums):
+    #     indices[n]=i
+    # for i,n in enumerate(nums):
+    #     diff=target-n
+    #     if diff in indices and i!=indices[diff]:
+    #         return [i,indices[diff]]
 
 
 def topKFrequent(nums,k):
     counts={}
     for i in nums:
         counts[i]=1+counts.get(i,0)
-    keysorted=list(dict(sorted(counts.items(),key=lambda x:x[1])).keys())
+    keysorted=list(dict(sorted(counts.items(),key=lambda x:x[1])).keys())#.items() turns a dictionary into an dict object that is a list of tuples, dict( changes it back to a dict, and keys changes a dict to a dict object that's a list with the keys, then list just converts it to list
     return keysorted[-k:]
+
+def encode(strs):
+    return ",".join(strs)
+
+def decode(s):
+    start=0
+    decoded=[]
+    if s=="":
+        return [""]
+    for i in range(len(s)):
+        if s[i]=='#':
+            decoded.append(s[start:i])
+            start=i+1
+        if i==len(s)-1:
+            decoded.append(s[start:])
+    return decoded
+
 
 
 def main():
@@ -272,6 +310,16 @@ def main():
     # print(k.add(6))
     # print(k.add(7))
     # print(k.add(8))
-    print(groupAnagrams(["act","pots","tops","cat","stop","hat"]))
-
+    #print(groupAnagrams(["act","pots","tops","cat","stop","hat"]))
+    head=listnode(1)
+    l1=listnode(2)
+    l2=listnode(3)
+    l3=listnode(4)
+    head.next=l1
+    l1.next=l2
+    l2.next=l3
+    l3.next=l2
+    print(hasCycle(head))
+    # s=encode(["neet","code","love","you"])
+    # print(decode(s))
 main()
