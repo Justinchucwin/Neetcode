@@ -3,6 +3,26 @@ class listnode:
         self.value=value
         self.next=next
 
+class Minstack:
+    def __init__(self):
+        self.stack=[]
+        self.minstack=[]
+
+    def push(self,val):
+        self.stack.append(val)
+        if self.minstack:
+            val=min(val,self.minstack[-1])
+        self.minstack.append(val)
+
+    def pop(self):
+        self.stack.pop()
+        self.minstack.pop()
+
+    def top(self):
+        return self.stack[-1]
+    
+    def getMin(self):
+        return self.minstack[-1]
 
 
 class TreeNode:
@@ -129,12 +149,9 @@ def validpalindrome(s):
     return True
 
 
-
-
-
 def isValid(s):#gets a string as an arguement and see's if it follows rule of closed parentheses
     stack=[]
-    closetoopen={")":"(","}":"{","[":"]"}
+    closetoopen={")":"(","}":"{","]":"["}
 
     for i in s:
         if i in closetoopen:
@@ -158,7 +175,8 @@ def reverselist(head):
         prev=curr
         curr=temp
     return prev
-            
+
+
 def hasCycle(head):
     curr=head
     count={}
@@ -168,6 +186,7 @@ def hasCycle(head):
             return True
         curr=curr.next
     return False
+
 
 def mergeTwoLists(head1,head2):
     current1=head1
@@ -274,8 +293,10 @@ def topKFrequent(nums,k):
     keysorted=list(dict(sorted(counts.items(),key=lambda x:x[1])).keys())#.items() turns a dictionary into an dict object that is a list of tuples, dict( changes it back to a dict, and keys changes a dict to a dict object that's a list with the keys, then list just converts it to list
     return keysorted[-k:]
 
+
 def encode(strs):
     return ",".join(strs)
+
 
 def decode(s):
     start=0
@@ -290,6 +311,17 @@ def decode(s):
             decoded.append(s[start:])
     return decoded
 
+
+def lengthOfLongestSubstring(s):
+    mp={}
+    l=0
+    res=0
+    for r in range(len(s)):
+        if s[r] in mp:
+            l=max(l,mp[s[r]]+1)
+        mp[s[r]]=r
+        res=max(res,r-l+1)
+    return res
 
 
 def main():
