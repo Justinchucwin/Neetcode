@@ -324,6 +324,47 @@ def lengthOfLongestSubstring(s):
     return res
 
 
+def maxDepth(root):
+    if root==None:
+        return 0
+    else:
+        value1=self.maxDepth(root.left)+1
+        value2=self.maxDepth(root.right)+1
+        if value1>=value2:
+            return value1
+        else:
+            return value2
+
+def searchMatrix(matrix,target):
+        l=0
+        r=len(matrix)-1
+        array=[]
+        while l<=r:
+            middle=(l+r)//2
+            if matrix[middle][0]>target:
+                r=middle-1
+            elif matrix[middle][-1]<target:
+                l=middle+1
+            else:
+                array=matrix[middle]
+                break
+        if not array:
+            return False
+        l=0
+        r=len(array)-1
+        while l<=r:
+            middle=(l+r)//2
+            if array[middle]>target:
+                r=middle-1
+            elif array[middle]<target:
+                l=middle+1
+            else:
+                return True
+
+        return False
+
+
+
 def main():
     #print(binarysearch([1,2,3,4,5,6],0,5,4))
     #print(maxProfit([10,8,7,5,2]))
