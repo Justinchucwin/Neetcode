@@ -364,6 +364,39 @@ def searchMatrix(matrix,target):
         return False
 
 
+def subsets(nums):
+    res=[]
+    subset=[]
+    # for num in nums:
+    #     res+=[subset+[num] for subset in res]
+    # return res  
+    def dfs(i):#dfs
+        if i>=len(nums):
+            res.append(subset.copy())
+            return
+        subset.append(nums[i])
+        dfs(i+1)
+        subset.pop()
+        dfs(i+1)
+    dfs(0)
+    return res
+
+
+def combinationSum(nums,target):
+    res=[]
+    def dfs(i,cur,total):
+        if total==target:
+            res.append(cur.copy())
+            return
+        elif i>=len(nums) or total>target:
+            return
+        cur.append(nums[i])
+        dfs(i,cur,total+nums[i])
+        cur.pop()
+        dfs(i+1,cur,total)
+    dfs(0,[],0)
+    return res
+
 
 def main():
     #print(binarysearch([1,2,3,4,5,6],0,5,4))
@@ -384,15 +417,17 @@ def main():
     # print(k.add(7))
     # print(k.add(8))
     #print(groupAnagrams(["act","pots","tops","cat","stop","hat"]))
-    head=listnode(1)
-    l1=listnode(2)
-    l2=listnode(3)
-    l3=listnode(4)
-    head.next=l1
-    l1.next=l2
-    l2.next=l3
-    l3.next=l2
-    print(hasCycle(head))
+    # head=listnode(1)
+    # l1=listnode(2)
+    # l2=listnode(3)
+    # l3=listnode(4)
+    # head.next=l1
+    # l1.next=l2
+    # l2.next=l3
+    # l3.next=l2
+    # print(hasCycle(head))
     # s=encode(["neet","code","love","you"])
     # print(decode(s))
+    print(subsets([1,2,3]))
+
 main()
