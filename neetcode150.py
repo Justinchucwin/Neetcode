@@ -1,3 +1,4 @@
+import math
 class listnode:
     def __init__(self,value=0,next=None):
         self.value=value
@@ -335,6 +336,7 @@ def maxDepth(root):
         else:
             return value2
 
+
 def searchMatrix(matrix,target):
         l=0
         r=len(matrix)-1
@@ -398,6 +400,111 @@ def combinationSum(nums,target):
     return res
 
 
+def productExceptSelf(nums):
+    res=[1]*len(nums)
+    prefix=1
+    for i in range(len(nums)):
+        res[i]=prefix
+        prefix*=nums[i]
+    postfix=1
+    for i in range(len(nums)-1,-1,-1):
+        res[i]*=postfix
+        postfix*=nums[i]
+    return res
+
+
+def threesum(nums):
+    indexes=[]
+    res=[]
+    for i in range(len(nums)):
+        for j in range(i+1,len(nums)):
+            res.append([nums[i],nums[j]])
+            indexes.append([i,j])
+    #print(indexes)
+    temp=set()
+    for i in range(len(res)):
+        for j in range(len(nums)):
+            if j not in indexes[i]:
+                #print(j)
+                total=nums[j]
+                res[i].append(nums[j])
+                #print(res[count])
+                for k in range(2):
+                    total+=res[i][k]
+                if total==0:
+                    res[i].sort()
+                    temp.add(tuple(res[i]))
+            res[i]=res[i][0:2]
+    res=[]
+    for i in temp:
+        res.append(list(i))
+    return res
+
+
+def evalRPN(tokens):
+    # nums=[]
+    # answer=0
+    # first=True
+    # for i in range(len(tokens)):
+    #     if tokens[i].isdigit() or (tokens[i][0]=='-' and len(tokens[i])>1):
+    #         a=1
+    #         if tokens[i][0]=='-':
+    #             a=-1
+    #             tokens[i]=tokens[i][1:]
+    #         nums.append(int(tokens[i])*a)
+    #         if first:
+    #             answer=int(tokens[i])*a
+    #             first=False
+    #     else:
+    #         top=nums[-1]
+    #         second=nums[-2]
+    #         nums.pop()
+    #         nums.pop()
+    #         if tokens[i]=="+":
+    #             answer=second+top
+    #         elif tokens[i]=="-":
+    #             answer=second-top
+    #         elif tokens[i]=="*":
+    #             answer=second*top
+    #         elif tokens[i]=="/":
+    #             answer=int(second/top)
+    #         nums.append(answer)
+    # return answer
+    stack = []#also no need for answer
+    for c in tokens:
+        if c == "+":#optimized code where YOU know what the else statement is going to be so you can avoid what i did above (convert positive and integer strings to int #not good)
+            stack.append(stack.pop() + stack.pop())
+        elif c == "-":
+            a, b = stack.pop(), stack.pop()
+            stack.append(b - a)
+        elif c == "*":
+            stack.append(stack.pop() * stack.pop())
+        elif c == "/":
+            a, b = stack.pop(), stack.pop()
+            stack.append(int(float(b) / a))
+        else:
+            stack.append(int(c))
+    return stack[0]#just have to return the only element in the list
+
+
+def minEatingSpeed(piles,h):
+    piles.sort()
+    smallest=1
+    biggest=piles[-1]
+    res=biggest
+    while smallest<=biggest:#this makes sense because we got all the integers we needed, we don't need to use integers outside of these bounds
+        hoursp=0
+        middle=(smallest+biggest)//2
+        for i in range(len(piles)):
+            hoursp+= math.ceil(float(piles[i]) / middle)
+        if hoursp>h:#hours passed is more than hours means we need to make middle be bigger so that hoursp can be smaller, doesn't meet the requirement 
+            smallest=middle+1
+        else:
+            res=middle
+            biggest=middle-1
+    return res
+
+
 def main():
     #print(binarysearch([1,2,3,4,5,6],0,5,4))
     #print(maxProfit([10,8,7,5,2]))
@@ -428,6 +535,6 @@ def main():
     # print(hasCycle(head))
     # s=encode(["neet","code","love","you"])
     # print(decode(s))
-    print(subsets([1,2,3]))
-
+    #print(subsets([1,2,3]))
+    print(threesum([-1,0,1,2,-1,-4]))
 main()
