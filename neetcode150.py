@@ -1,4 +1,5 @@
 import math
+from collections import defaultdict
 class listnode:
     def __init__(self,value=0,next=None):
         self.value=value
@@ -500,9 +501,60 @@ def minEatingSpeed(piles,h):
         if hoursp>h:#hours passed is more than hours means we need to make middle be bigger so that hoursp can be smaller, doesn't meet the requirement 
             smallest=middle+1
         else:
-            res=middle
+            res=middle#in this else statement hoursp is either equal to hours or less than hours so we can record middle to res since it satisfies the time constraint
             biggest=middle-1
     return res
+
+
+def isvalidSudoku(board):
+    rows=defaultdict(set)
+    cols=defaultdict(set)
+    squares=defaultdict(set)
+    for r in range(9):
+        for c in range(9):
+            if board[r][c].isdigit():
+                if board[r][c] in rows[r] or board[r][c] in cols[c] or board[r][c] in squares[(r//3,c//3)]:
+                    return False
+                rows[r].add(board[r][c])
+                cols[c].add(board[r][c])
+                squares[(r//3,c//3)].add(board[r][c])
+    return True
+
+def reorderList(head):
+    slow=head
+    fast=head.next
+    while fast and fast.next:
+        slow=slow.next
+        fast=fast.next.next
+    
+    second=slow.next
+    prev=slow.next=None
+    while second:
+        temp=second.next
+        second.next=prev
+        prev=second
+        second=temp
+    first=head
+    second=prev
+    while second:
+        temp1,temp2=first.next,second.next
+        first.next=second
+        second.next=temp1
+        first=temp1
+        second=temp2
+
+def checkInclusion(s1,s2):
+    count1=defaultdict(int)
+    for i in range(len(s1)):
+        count1[s1[i]]+=1
+    for i in range((len(s2)+1)-len(s1)):
+        if s2[i] in count1:
+            count2=defaultdict(int)
+            for j in range(len(s1)):
+                count2[s2[i+j]]+=1
+            if count2==count1:
+                return True
+    return False
 
 
 def main():
