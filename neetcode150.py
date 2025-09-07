@@ -5,7 +5,10 @@ class listnode:
         self.value=value
         self.next=next
 
-class Minstack:#if we want to keep track of the minimum value we need a second stack because we need to keep track of when the min value was added because if it's popped then we need to rely on a new minimum value which was added prior to the recent one being popped
+
+
+#if we want to keep track of the minimum value we need a second stack because we need to keep track of when the min value was added because if it's popped then we need to rely on a new minimum value which was added prior to the recent one being popped
+class Minstack:
     def __init__(self):
         self.stack=[]
         self.minstack=[]
@@ -25,6 +28,7 @@ class Minstack:#if we want to keep track of the minimum value we need a second s
     
     def getMin(self):
         return self.minstack[-1]
+
 
 
 class TreeNode:
@@ -60,6 +64,7 @@ class linklist:
         current.next=listnode(value)
     
 
+
 #if we're trying to the kth largest element in the array, we can just sort the array each time we add it and then get the nums[-k]
 class KthLargest:
     def __init__(self,k,nums):
@@ -72,7 +77,9 @@ class KthLargest:
         return self.nums[-self.k]
 
 
-def invertTree(root):#for each iteration in recursion we want to switch the left child and the right child save the left child and then swap. 
+
+#for each iteration in recursion we want to switch the left child and the right child save the left child and then swap.
+def invertTree(root): 
     if root==None:
         return
     temproot=root.left
@@ -83,8 +90,8 @@ def invertTree(root):#for each iteration in recursion we want to switch the left
     return root
 
 
-
-def binarysearch(array,l,r,target):#time complexity O(log(n)) splits the array in half each time based off of middle and whether target is bigger or smaller than that. 
+#time complexity O(log(n)) splits the array in half each time based off of middle and whether target is bigger or smaller than that. 
+def binarysearch(array,l,r,target):
     if r<l:#for recursive it's not <= but just less than cause there could be a case of only having one element 
         return -1
     else:
@@ -99,7 +106,8 @@ def binarysearch(array,l,r,target):#time complexity O(log(n)) splits the array i
             return binarysearch(array,mid+1,r,target)
 
 
-def maxProfit(prices):#index is day, elements are price. for this one if we find a value that's lower than the previous we just use that value instead and compare it to the later values because lower buy is better than higher buy and we can just keep track of maxprofits
+#index is day, elements are price. for this one if we find a value that's lower than the previous we just use that value instead and compare it to the later values because lower buy is better than higher buy and we can just keep track of maxprofits
+def maxProfit(prices):
     l,r=0,1
     maxp=0
 
@@ -112,8 +120,9 @@ def maxProfit(prices):#index is day, elements are price. for this one if we find
         r+=1
     return maxp
 
-
-def isAnagram(s,t):#anagrams will have the same count of letters, no better way to do this than to use a hashmap. Unique letters(key) with how many times they repeat(value) can't use set because if there's a repeat character we'll never know with a set and then we can't compare words
+#anagrams will have the same count of letters, no better way to do this than to use a hashmap. 
+#Unique letters(key) with how many times they repeat(value) can't use set because if there's a repeat character we'll never know with a set and then we can't compare words
+def isAnagram(s,t):
     counts,countt={},{}
     if len(s)!=len(t):
         return False
@@ -123,7 +132,9 @@ def isAnagram(s,t):#anagrams will have the same count of letters, no better way 
     return counts==countt
 
 
-def scoreofstring(s):#if i were to redo this i would iterate from (1,len(s)) and have it so that it takes the abs difference of prev and current then add it to the total. Below has a better time complexity O(n/2) but the way i just described it sounds easier
+#if i were to redo this i would iterate from (1,len(s)) and have it so that it takes the abs difference of prev and current then add it to the total. 
+#Below has a better time complexity O(n/2) but the way i just described it sounds easier
+def scoreofstring(s):
     sum=0
     lengthstr=len(s)
     for i in range(lengthstr//2):
@@ -135,7 +146,8 @@ def scoreofstring(s):#if i were to redo this i would iterate from (1,len(s)) and
     return sum
 
 
-def validpalindrome(s):#there can be spaces in the string so letter a certain amount of position away from the beginning compared to the mirror could be different if left and right pointer equal each otherthen it's a palindrome but if it doesn't reach there two characters don't match up
+#there can be spaces in the string so letter a certain amount of position away from the beginning compared to the mirror could be different if left and right pointer equal each other then it's a palindrome but if it doesn't reach there two characters don't match up
+def validpalindrome(s):
     startind=0
     endind=len(s)-1
     while endind>startind:
@@ -153,7 +165,9 @@ def validpalindrome(s):#there can be spaces in the string so letter a certain am
     return True
 
 
-def isValid(s):#gets a string as an arguement and see's if it follows rule of closed parentheses. pushes open parenthesis in and if it encounters a close parenthesis checks the top of the stack to see if it matches if stack is empty by the end it returns true cause it popped out all the open parenthesis
+#gets a string as an arguement and see's if it follows rule of closed parentheses. 
+#pushes open parenthesis in and if it encounters a close parenthesis checks the top of the stack to see if it matches if stack is empty by the end it returns true cause it popped out all the open parenthesis
+def isValid(s):
     stack=[]
     closetoopen={")":"(","}":"{","]":"["}
 
@@ -170,7 +184,9 @@ def isValid(s):#gets a string as an arguement and see's if it follows rule of cl
     return False
 
 
-def reverselist(head):#in order to reverse you have to initialize prev if the first node is going to be the last then the last will point to none therfore prev has to be none. save the curr.next set curr.next=prev than prev to current then curr to temp
+#in order to reverse you have to initialize prev if the first node is going to be the last then the last will point to none therfore prev has to be none. 
+# save the curr.next set curr.next=prev than prev to current then curr to temp
+def reverselist(head):
     prev,curr=None,head
 
     while curr:
@@ -181,7 +197,9 @@ def reverselist(head):#in order to reverse you have to initialize prev if the fi
     return prev
 
 
-def hasCycle(head):#i stored all nodes in a hashmap and if the current node is in the hashmap than there's a cycle. we could just use set. We could also do two pointers so that the space complexity is O(1) if there's a cycle it's infinitely repeating so slow and fast will eventually have to meet up
+#i stored all nodes in a hashmap and if the current node is in the hashmap than there's a cycle. we could just use set. 
+#We could also do two pointers so that the space complexity is O(1) if there's a cycle it's infinitely repeating so slow and fast will eventually have to meet up
+def hasCycle(head):
     curr=head
     count={}
     while curr!=None:
@@ -192,7 +210,8 @@ def hasCycle(head):#i stored all nodes in a hashmap and if the current node is i
     return False
 
 
-def mergeTwoLists(head1,head2):#solution makes it easy, while there are still more nodes compare the nodes. add the lesser node to node then iterate once through the lesser node list. at the end add the remainder to the node
+#solution makes it easy, while there are still more nodes compare the nodes. add the lesser node to node then iterate once through the lesser node list. at the end add the remainder to the node
+def mergeTwoLists(head1,head2):
     # current1=head1
     # current2=head2
     # if head1.value<=head2.value:
@@ -232,8 +251,9 @@ def mergeTwoLists(head1,head2):#solution makes it easy, while there are still mo
     return dummy.next#dummy next is the start since the current is just an empty node pointing to the start
 
             
-
-def climbStairs(n):#for this i imagine that there are two ways to get to the second to last and third to last step making it so that there has to be at least 3 steps making the base case n<=2 and the rest being the sum of the total combinations of second to last and third to last steps
+#for this i imagine that there are two ways to get to the second to last and third to last step 
+#making it so that there has to be at least 3 steps making the base case n<=2 and the rest being the sum of the total combinations of second to last and third to last steps
+def climbStairs(n):
     # def dfs(i): recursive way O(2^n)
     #     if i>=n:
     #         return i==n
@@ -248,7 +268,8 @@ def climbStairs(n):#for this i imagine that there are two ways to get to the sec
     #return dfs(0)
 
 
-def canAttendMeeting(intervals):#sort the meetings by start time, and if the end of the meeting is greater than the next elements start it will clash. 
+#sort the meetings by start time, and if the end of the meeting is greater than the next elements start it will clash.
+def canAttendMeeting(intervals): 
     sortedintervals=intervals.sort(key=lambda x:x.start)#lambda is a mini function that returns x.start for all the x's and the key in sort sorts it by x.start
     for i in range(1,len(intervals)):
         if intervals[i-1].end>intervals[i].start:
@@ -405,7 +426,6 @@ def lengthOfLongestSubstring(s):
     return res
 
 
-
 #if it goes through 1 node then it will return the value of the depth plus 1(1 being the current node)
 #value keeps on getting added for the current node
 #then once it reaches back to the ture it will compare the values
@@ -493,7 +513,6 @@ def combinationSum(nums,target):
     return res
 
 
-
 #for this one we're tryign to get two arrays where prefix is the products of the elements from left to right and postfix is the products of elements from right to left, and then for each to multiply it with each other
 #this would result in the product for each i to be everything but itself
 def productExceptSelf(nums):
@@ -507,7 +526,6 @@ def productExceptSelf(nums):
         res[i]*=postfix
         postfix*=nums[i]
     return res
-
 
 
 def threesum(nums):
@@ -658,7 +676,6 @@ def reorderList(head):
         second=temp2
 
 
-
 #It said permutation of a string in this problem so i think of hash map where key(character) value(frequency)
 #get the frequencies for the first string so that we can compare it to the frequencies for the substring within string 2 
 def checkInclusion(s1,s2):
@@ -673,6 +690,38 @@ def checkInclusion(s1,s2):
             if count2==count1:#checks to see if frequencies match up
                 return True
     return False
+
+
+#This problem had to run in O(n) time, and asked for consecutive sequence
+#So sort was out of the question even though it was the first thing I thought about
+#when i think of O(n) im thinking of hashset and iterating n times through a range, especially with this problem cause I can get the max and min in O(n) time
+#use set because i don't need repeating characters
+#then when i get the min and max i check to see whether or not the the current count and count+1 are in the set and if they are I add 1
+def longestConsecutive(nums):
+    res=0
+    if len(nums)>0:
+        res=1
+        subres=1
+        minimum=nums[0]
+        maximum=nums[0]
+        numbers=set()
+        for i in range(len(nums)):
+            numbers.add(nums[i])
+            if nums[i]<minimum:
+                minimum=nums[i]
+            if nums[i]>maximum:
+                maximum=nums[i]
+        count=minimum
+        while count<maximum:
+            if count in numbers and count+1 in numbers:
+                subres+=1
+                if subres>res:
+                    res=subres
+            else:
+                subres=1
+            count+=1
+    return res
+
 
 
 def main():
@@ -706,5 +755,5 @@ def main():
     # s=encode(["neet","code","love","you"])
     # print(decode(s))
     #print(subsets([1,2,3]))
-    print(threesum([-1,0,1,2,-1,-4]))
+    #print(threesum([-1,0,1,2,-1,-4]))
 main()
