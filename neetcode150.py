@@ -120,6 +120,7 @@ def maxProfit(prices):
         r+=1
     return maxp
 
+
 #anagrams will have the same count of letters, no better way to do this than to use a hashmap. 
 #Unique letters(key) with how many times they repeat(value) can't use set because if there's a repeat character we'll never know with a set and then we can't compare words
 def isAnagram(s,t):
@@ -307,7 +308,6 @@ def groupAnagrams(strs):
     return list(res.values())#turns the dictionary object into a list 
 
 
-
 def hasDuplicate(nums):#sort makes it so that duplicates are together so that you can just check prev to next, however if i were to do this again i would just make a set and add the elements within the set until there's a duplicate then return true
     nums.sort()
     for i in range(1,len(nums)):
@@ -348,7 +348,6 @@ def topKFrequent(nums,k):
         counts[i]=1+counts.get(i,0)
     keysorted=list(dict(sorted(counts.items(),key=lambda x:x[1])).keys())#.items() turns a dictionary into an dict object that is a list of tuples, dict( changes it back to a dict, and keys changes a dict to a dict object that's a list with the keys, then list just converts it to list
     return keysorted[-k:]
-
 
 
 # def encode(strs):
@@ -723,6 +722,127 @@ def longestConsecutive(nums):
     return res
 
 
+#for this problem you want the two pointers to start on the opposite ends of the list
+#this is so that we can find out which one is greater than the other
+#whatever is less than you want to move it to either the left or the right
+#because you know from that position that's the greatest area it's ever going to be, or a greater area has been recorded already
+def maxArea(heights):
+    l,r=0,len(heights)-1
+    res=0
+    
+    while l<r:
+        area=min(heights[l],heights[r])*(r-l)
+        res=max(res,area)
+        if heights[l]<=heights[r]:
+            l+=1
+        else:
+            r-=1
+    return res
+
+
+#if I have two pointers and l is at the beggininng and r is at the end of the list
+#then i can calculate the area for each position in between l and by comparing the current max value of right or left to the positions either right of leftmax or left of rightmax
+#we can only calculate the area of the position adjancent to the pointers by comparing it to the lowest max between right and left
+#if the current position is lower than the lowest max we can consider that positive area
+#if equal then max remains the same and area is incremented by 0 since no area can be obtained
+#if current position height is greater then we change the max so we can account gained area for newer positions but area for that specific iteration would still be 0
+def trap(height):
+    l,r=0,len(height)-1
+    res=0
+    leftmax,rightmax=height[l],height[r]
+    while l<r:
+        if leftmax<rightmax:
+            l+=1
+            leftmax=max(height[l],leftmax)
+            res+=leftmax-height[l]
+        else:
+            r-=1
+            rightmax=max(rightmax,height[r])
+            res+=rightmax-height[r]
+    return res
+
+
+#this one just requires logic of carry over and addition
+#if there's carrover at anywhere besides the end you just add 1 to the current digit, if it's 10 then carry over still continues if not then the loop still happens
+#if carryover is at the end(first index) you would want to insert 1 at the beggininng and set the current i to 0
+def plusone(digits):
+    carryover=True
+    for i in range(len(digits)-1,-1,-1):
+        if carryover:
+            digits[i]+=1
+            if digits[i]==10:
+                digits[i]=0
+                if i==0:
+                    digits.insert(0,1)
+            else:
+                carryover=False
+    return digits
+
+
+#when i think of obtaining digits for each number without using string i think of mod 10 then floor division
+#and when I think of whether or not a number has already been discovered I think of a set
+#if total is equal to 1 then it returns true but if there's a cycle (total in numbers) it returns false
+def isHappy(n):
+    total=0
+    numbers=set()
+    while total!=1:
+        total=0
+        while n!=0:
+            total+=(n%10)**2
+            n=n//10
+        if total in numbers:
+            return False
+        else:
+            numbers.add(total)
+            n=total
+    return True
+
+
+def characterReplacement(s,k):
+    l,r=0,1
+    holder=k
+    res=k
+    while r<len(s):
+        if s[l]==s[r]:
+            res=max(res,r+1-l)
+            r+=1
+            
+        else:
+            if k==0:
+                k=holder
+                l+=1
+                r=l+1
+            else:
+                k-=1
+                r+=1
+    res=max(res,r-l+k)
+    return res
+        
+            
+
+#We want to get frequency of the everything up to the right pointer
+#this is so that we can record the longest consecutive string between l and r
+#since max frequency+k should be the length of the longest substring within l and r
+#if the length of l and r is greater than that we need to go on and find a new substring
+def characterReplacement(s,k):
+    count = {}
+    res = 0
+
+    l = 0
+    maxf = 0
+    for r in range(len(s)):
+        count[s[r]] = 1 + count.get(s[r], 0)
+        maxf = max(maxf, count[s[r]])
+
+        while (r - l + 1) - maxf > k:
+            count[s[l]] -= 1
+            l += 1
+        res = max(res, r - l + 1)
+
+    return res
+
+
+
 
 def main():
     #print(binarysearch([1,2,3,4,5,6],0,5,4))
@@ -756,4 +876,7 @@ def main():
     # print(decode(s))
     #print(subsets([1,2,3]))
     #print(threesum([-1,0,1,2,-1,-4]))
+    return 0
+
+
 main()
