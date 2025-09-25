@@ -514,17 +514,17 @@ def combinationSum(nums,target):
 
 #for this one we're tryign to get two arrays where prefix is the products of the elements from left to right and postfix is the products of elements from right to left, and then for each to multiply it with each other
 #this would result in the product for each i to be everything but itself
-def productExceptSelf(nums):
-    res=[1]*len(nums)
-    prefix=1
-    for i in range(len(nums)):
-        res[i]=prefix
-        prefix*=nums[i]
-    postfix=1
-    for i in range(len(nums)-1,-1,-1):
-        res[i]*=postfix
-        postfix*=nums[i]
-    return res
+# def productExceptSelf(nums):
+#     res=[1]*len(nums)
+#     prefix=1
+#     for i in range(len(nums)):
+#         res[i]=prefix
+#         prefix*=nums[i]
+#     postfix=1
+#     for i in range(len(nums)-1,-1,-1):
+#         res[i]*=postfix
+#         postfix*=nums[i]
+#     return res
 
 
 def threesum(nums):
@@ -554,6 +554,22 @@ def threesum(nums):
         res.append(list(i))
     return res
 
+
+def productExceptSelf(nums):
+    prenum=1
+    postnum=1
+    prefix=[]
+    postfix=[]
+    res=[]
+    for i in range(len(nums)):
+        prefix.append(prenum)
+        postfix.insert(0,postnum)
+        prenum*=nums[i]
+        postnum*=nums[len(nums)-1-i]
+    for i in range(len(nums)):
+        res.append(prefix[i]*postfix[i])
+    return res
+        
 
 #reverse polish notation requires a stack because we're using the most recent element we pushed onto the stack.
 #if using most recent elements we pushed in (last in first out)
@@ -842,6 +858,150 @@ def characterReplacement(s,k):
     return res
 
 
+#my way, when i see taking a substring of a string that should contain certain characters of a string arguement
+#Then i think of having a hashmap to keep track of the characters and their frequency
+#where all the character of the string arguements is between the left and a right pointer including the left and the right pointer 
+#there are some cases i had to be wary about, if the 2nd string arguement is bigger than the first string arguement. if it's bigger than my function didn't work so i had to make an if statement
+#and if we can't find a valid substring then the return has to be an empty string since length is intialize to the length of the first string and we'd have to compare it to other lengths since we're trying to find the smallest
+def minwindow(s,t):
+    l,r=0,0
+    counts=defaultdict(int)
+    length=len(s)
+    check=True
+    start=0
+    for i in range(len(t)):
+        counts[t[i]]+=1
+    temp=dict(counts)
+    if len(t)>=len(s):
+        for i in s:
+            if i in temp:
+                temp[i]-=1
+                if temp[i]==0:
+                    temp.pop(i)
+        if len(temp)==0:
+            return s
+        else:
+            return ""
+    else:
+        while r<len(s):
+            if s[r] in temp:
+                if temp==counts:
+                    l=r
+                temp[s[r]]-=1
+                if temp[s[r]]==0:
+                    temp.pop(s[r])
+                    if len(temp)==0:
+                        if check:
+                            check=False
+                        if length>(r-l+1):
+                            start=l
+                            length=r-l+1
+                        temp=dict(counts)
+                        l+=1
+                        while l<r:
+                            if s[l] in counts:
+                                break
+                            l+=1
+                        r=l-1
+            r+=1
+    if check:
+        return ""
+    return s[start:start+length]
+        
+
+
+#I initially thought it was every other one either odd or even would be max but that's not the case cause some evens can be bigger than odss and the other way around and could be one apart from the others
+#If you're thinking of having a max amount of anything for each ith iteration then think about using intervals thinking that the ith iteration is the max possible value it could be present and before
+def rob(nums):
+    if len(nums)==0:
+        return 0
+    if len(nums)<2:
+        return max(nums)
+    dp=[0]*len(nums)
+    dp[0]=nums[0]
+    dp[1]=max(nums[0],nums[1])
+    for i in range(2,len(nums)):
+        dp[i]=max(nums[i]+dp[i-2],dp[i-1])
+    return dp[-1]
+        
+        
+#Intevals apply with minimum also
+#for this one with thinking i figured that for each ith position I could just calculate the miniumum cost to get to that square plus the cost of the current square since i had two iterations behind that one also
+def minCostClimbingStairs(cost):
+    if len(cost)==0:
+        return 0
+    if len(cost)<2:
+        return min(cost[0],cost[1])
+    dp=[0]*len(cost)
+    dp[0]=cost[0]
+    dp[1]=cost[1]
+    for i in range(2,len(cost)):
+        dp[i]=min(cost[i]+dp[i-1],cost[i]+dp[i-2])
+    return min(dp[-1],dp[-2])
+
+
+def maxSlidingWindow(nums,k):
+    n=len(nums)
+    leftmax=[0]*n
+    rightmax=[0]*n
+    leftmax[0]=nums[0]
+    rightmax[-1]=nums[-1]
+    res=[]
+    for i in range(1,n):
+        if i%k==0:
+            leftmax[i]=nums[i]
+        else:
+            leftmax[i]=max(nums[i],leftmax[i-1])
+        if (n-1-i)%k==0:
+            rightmax[n-1-i]=nums[n-1-i]
+        else:
+            rightmax[n-1-i]=max(nums[n-1-i],rightmax[n-i])
+    for i in range(n-k+1):
+        res.append(max(leftmax[i+k-1],rightmax[i]))
+    return res
+
+
+#For this one I didn't think of stacks for solving the problem
+#I was thinking about all combinations of valid parenthesis
+#and when i think of EVERY COMBINATION I think of backtracking
+#so i utilized backtracking with where i would add on open or closed parenthesis to a string
+#returning the function if it was over the desired length(2*n) or if it was equivelant to the length
+#if there were still open parenthesis in the string then i wouldn't add it to my set but if there wasn't then the string is added
+#and closed parenthesis could only be added if there were open parenthesis that wasn't closed
+def generateParenthesis(n):
+    valid=set()
+    def generatep(nopens,s):
+        if len(s)>2*n:
+            return
+        if len(s)==2*n:
+            if nopens==0:
+                valid.add(s)
+            return
+        generatep(nopens+1,s+'(')
+        if nopens>0:
+            generatep(nopens-1,s+')')
+    generatep(0,"")
+    return list(valid)
+
+
+
+#for this one if nums[l] is lower than nums[r] then we checked all the values we need to and we can compare nums[l] with the current res
+#since we're either changing l=m+1 or r=m-1 we have to see whether or not m is min so we have to do res=min(res,nums[middle])
+#we're basically avoiding the area that's ascending cause we already recorded the first value and we don't need anything in between the first and last ascending value
+def findMin(nums):
+    res=nums[0]
+    l,r=0,len(nums)-1
+    while l<=r:
+        if nums[l]<nums[r]:
+            res=min(res,nums[l])
+            break
+        middle=(l+r)//2
+        res=min(res,nums[middle])
+        if nums[l]<=nums[middle]:
+            l=middle+1
+        else:
+            r=middle-1
+    return res
 
 
 def main():
@@ -876,6 +1036,7 @@ def main():
     # print(decode(s))
     #print(subsets([1,2,3]))
     #print(threesum([-1,0,1,2,-1,-4]))
+    print(productExceptSelf([1,2,3,4]))
     return 0
 
 
