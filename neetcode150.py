@@ -1004,6 +1004,22 @@ def findMin(nums):
     return res
 
 
+
+#For this problem we're trying to see the difference of positions between the current day and the next day it will be warmer.
+#If that is the case, if we just put all the prev days into a stack (prevday=dayt,dayi) and then compare it to the days after (current) then we can see if the current day is more than the last position of stacks and we can calculate the difference of positions
+#we can then put the value at the correct spot in res since we have the previous's days position
+def dailyTemperatures(temperatures):
+    res=[0]*len(temperatures)
+    stack=[]
+    for i,t in enumerate(temperatures):
+        while stack and t>stack[-1][0]:
+            stackt,stacki=stack.pop()
+            res[stacki]=i-stacki
+        stack.append((t,i))
+    return res
+
+
+
 def main():
     #print(binarysearch([1,2,3,4,5,6],0,5,4))
     #print(maxProfit([10,8,7,5,2]))
