@@ -1019,6 +1019,29 @@ def dailyTemperatures(temperatures):
     return res
 
 
+#looked at time complexity saw nlogn thought of sorting
+#with sorting I can have the positions of the cars ascending order
+#if the current car reaches the destination faster than the car ahead then it joins the fleet that's why I calculated both times to reach target for current(i) and prev(i+1)
+#if the current car reaches the destination faster joins fleet, if not it makes its own fleet
+#didn't use stacks though suprisingly 
+def carFleet(target,position,speed):
+    cars=[]
+    fleets=[]
+    for i in range(len(position)):
+        cars.append([position[i],speed[i]])
+    cars.sort(key=lambda x:x[0])
+    fleets.append([cars[-1]])
+    for i in range(len(position)-2,-1,-1):
+        timetotarget1=(target-cars[i][0])/cars[i][1]
+        timetotarget2=(target-cars[i+1][0])/cars[i+1][1]
+        if timetotarget1<=timetotarget2:
+            fleets[0].append(cars[i])
+            cars[i][0],cars[i][1]=cars[i+1][0],cars[i+1][1]
+        else:
+            fleets.insert(0,cars[i])
+    return len(fleets)
+        
+
 
 def main():
     #print(binarysearch([1,2,3,4,5,6],0,5,4))
@@ -1052,7 +1075,7 @@ def main():
     # print(decode(s))
     #print(subsets([1,2,3]))
     #print(threesum([-1,0,1,2,-1,-4]))
-    print(productExceptSelf([1,2,3,4]))
+    print(carFleet(10,[6,8],[3,2]))
     return 0
 
 
