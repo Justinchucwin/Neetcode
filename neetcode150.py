@@ -833,8 +833,7 @@ def characterReplacement(s,k):
                 r+=1
     res=max(res,r-l+k)
     return res
-        
-            
+          
 
 #We want to get frequency of the everything up to the right pointer
 #this is so that we can record the longest consecutive string between l and r
@@ -908,7 +907,6 @@ def minwindow(s,t):
         return ""
     return s[start:start+length]
         
-
 
 #I initially thought it was every other one either odd or even would be max but that's not the case cause some evens can be bigger than odss and the other way around and could be one apart from the others
 #If you're thinking of having a max amount of anything for each ith iteration then think about using intervals thinking that the ith iteration is the max possible value it could be present and before
@@ -984,7 +982,6 @@ def generateParenthesis(n):
     return list(valid)
 
 
-
 #for this one if nums[l] is lower than nums[r] then we checked all the values we need to and we can compare nums[l] with the current res
 #since we're either changing l=m+1 or r=m-1 we have to see whether or not m is min so we have to do res=min(res,nums[middle])
 #we're basically avoiding the area that's ascending cause we already recorded the first value and we don't need anything in between the first and last ascending value
@@ -1002,7 +999,6 @@ def findMin(nums):
         else:
             r=middle-1
     return res
-
 
 
 #For this problem we're trying to see the difference of positions between the current day and the next day it will be warmer.
@@ -1041,6 +1037,24 @@ def carFleet(target,position,speed):
             fleets.insert(0,cars[i])
     return len(fleets)
         
+
+def removeNthFromEnd(head,n):
+    current=head
+    length=0
+    while current!=None:
+        length+=1
+        current=current.next
+    current=head
+    position=length-n-1
+    if position==-1:
+        head=head.next
+    else:
+        for i in range(position):
+            current=current.next
+        if current.next!=None:
+            current.next=current.next.next
+    return head
+
 
 
 def main():
