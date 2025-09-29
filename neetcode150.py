@@ -1038,6 +1038,10 @@ def carFleet(target,position,speed):
     return len(fleets)
         
 
+#Since linked list can only go in one directions beggining to end, or at least just this one
+#if I wanted to get nth from the end then I needed the length of the list then minus n to get the position I wanted
+#So I iterated through the list to get the length, and when i had the position I wanted to go a previous node before that 
+#if the position was -1 then i would just set the head as head.next since we're taking away the start
 def removeNthFromEnd(head,n):
     current=head
     length=0
@@ -1056,6 +1060,20 @@ def removeNthFromEnd(head,n):
     return head
 
 
+#this problem makes sense because we're iterating through the heights and all the indexex to a stack
+#then we're checking to see if the current height is smaller than the top of stack
+#if the top of stack is larger than we can take the height of the top of the stack and multiply it by the width (i-1)-(stack[-1]+1)+1
+def largestRectangleArea(heights):
+    n=len(heights)
+    stack=[]
+    maxarea=0
+    for i in range(n+1):
+        while stack and (i==n or heights[stack[-1]]>=heights[i]):
+            height=heights[stack.pop()]
+            width=i if not stack else i-stack[-1]-1
+            maxarea=max(maxarea,width*height)
+        stack.append(i)
+    return maxarea
 
 def main():
     #print(binarysearch([1,2,3,4,5,6],0,5,4))
