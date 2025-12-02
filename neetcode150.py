@@ -1,10 +1,49 @@
 import math
+import requests
 from collections import defaultdict
+
+
+
 class listnode:
     def __init__(self,value=0,next=None):
         self.value=value
         self.next=next
 
+
+class Node:
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
+
+
+
+#for this one i had to read the question better, i was thinking how we'd get the binary search if we need the most recent in the list but also needed a timestamp lower thaan the one we got
+#Since we're storing different names with values associated with it names is keys and the value is a list of values
+#then for get it's a normal binary search
+class TimeMap:
+
+    def __init__(self):
+        self.hashkeys={}
+
+    def set(self, key: str, value: str, timestamp: int) -> None:
+        if key not in self.hashkeys:
+            self.hashkeys[key]=[]
+        self.hashkeys[key].append([value,timestamp])
+
+    def get(self, key: str, timestamp: int) -> str:   
+            res=""
+            l,r=0,len(self.hashkeys.get(key,[]))-1
+            while l<=r:
+                middle=(l+r)//2
+                if self.hashkeys[key][middle][1]==timestamp:
+                    return self.hashkeys[key][middle][0]
+                if self.hashkeys[key][middle][1]<timestamp:
+                    res=self.hashkeys[key][middle][0]
+                    l=middle+1
+                else:
+                    r=middle-1
+            return res
 
 
 #if we want to keep track of the minimum value we need a second stack because we need to keep track of when the min value was added because if it's popped then we need to rely on a new minimum value which was added prior to the recent one being popped
@@ -1075,6 +1114,72 @@ def largestRectangleArea(heights):
         stack.append(i)
     return maxarea
 
+
+#for this algorithm we're trying to see if target is between nums[l] to nums[middle] or nums[middle] nums[r]
+#we can do this by having two if statements seeing if target is bigger than nums l and smaller than nums[middle] or target is bigger than nums middle but smaller than nums[r]
+#however there are some cases where nums l is bigger than nums[middle] or nums[r] is smaller than nums[middle] meaning that target doesn't fall within the boundaries of the above if statements
+#so we have to check those also
+def search(nums,target):
+    l,r=0,len(nums)-1
+    res=-1
+    while l<=r:
+        middle=(l+r)//2
+        if nums[middle]==target:
+            res=middle
+            break
+        if nums[l]<=nums[middle]:
+            if target>=nums[l] and target<nums[middle]:
+                r=middle-1
+            else:
+                l=middle+1
+        else:
+            if target>nums[middle] and target<=nums[r]:
+                l=middle+1
+            else:
+                r=middle-1
+    return res
+
+
+#for this one if we want to find the next and randoms of the current node we're on while making a copy
+#then we have to make it so that the keys are the actual values of the original nodes
+#so that when we get to the copy of the node we can use original values to find out what the random and next are so we can get the copies of those also
+def copyRandomList(head):
+    oldtocopy={None:None}
+
+    curr=head
+    while curr:
+        oldtocopy[curr]=Node(curr.val)
+        curr=curr.next
+    curr=head
+    while curr:
+        copy=oldtocopy[curr]
+        copy.next=oldtocopy[curr.next]
+        copy.random=oldtocopy[curr.random]
+        cur=cur.next
+    return oldtocopy[head]
+
+
+def getFastestRunner(marathon,sex):
+    url="https://jsonmock.hackerrank.com/api/marathon"
+    page=1
+    hr=[]
+    while True:
+        response=requests.get(f"{url}?page={page}")
+        data=response.json()
+        for runner in data["data"]:
+            if runner["marathon_name"]==marathon and runner["sex"]==sex:
+                #print(runner)
+                hr.append(runner["avgheartbeat"])
+        if page>=data["total_pages"]:
+            break
+        page+=1
+    if len(hr)==0:
+        return 0
+    else:
+        return math.floor(sum(hr)/len(hr))
+
+
+
 def main():
     #print(binarysearch([1,2,3,4,5,6],0,5,4))
     #print(maxProfit([10,8,7,5,2]))
@@ -1107,7 +1212,8 @@ def main():
     # print(decode(s))
     #print(subsets([1,2,3]))
     #print(threesum([-1,0,1,2,-1,-4]))
-    print(carFleet(10,[6,8],[3,2]))
+    #print(carFleet(10,[6,8],[3,2]))
+    print(getFastestRunner("Cityscape Marathon","female"))
     return 0
 
 
